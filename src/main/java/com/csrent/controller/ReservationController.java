@@ -22,4 +22,13 @@ public class ReservationController {
     public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO){
         return ResponseEntity.ok(reservationService.add(reservationDTO));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Integer id) {
+        Reservation reservation = reservationService.getById(id);
+        if (reservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reservation);
+    }
 }

@@ -37,4 +37,10 @@ public class ReservationService {
 
         return reservationRepository.save(reservation);
     }
+
+    public Reservation getById(Integer id) {
+        return reservationRepository.findById(id).orElse(null);
+    }
 }
+
+
