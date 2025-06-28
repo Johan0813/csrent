@@ -40,8 +40,9 @@ public class UserController {
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(201).body(createdUser);
     }
-    @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        user.setId(id);
         User updatedUser = userService.updateUser(user);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
@@ -49,6 +50,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @PatchMapping
     public ResponseEntity<User> partialUpdateUser(@RequestBody User user) {

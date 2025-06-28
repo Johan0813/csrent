@@ -31,4 +31,14 @@ public class ReservationController {
         }
         return ResponseEntity.ok(reservation);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Reservation> update(@PathVariable Integer id, @RequestBody ReservationDTO dto) {
+        Reservation updated = reservationService.update(id, dto);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

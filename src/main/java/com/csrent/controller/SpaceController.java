@@ -64,15 +64,18 @@ public class SpaceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
 
     }
-    @PutMapping
-    public ResponseEntity<?> putSpace(@RequestBody Space space) {
-        if (space.getId() == null || !service.existsById(space.getId())) {
-            return ResponseEntity.notFound().build(); // 404 Not Found si no existe
+    @PutMapping("/{id}")
+    public ResponseEntity<Space> updateSpace(@PathVariable Integer id, @RequestBody Space space) {
+        space.setId(id); // para asegurarse de actualizar el correcto
+        Space updatedSpace = service.update(space); // este sí existe en tu service
+        if (updatedSpace != null) {
+            return ResponseEntity.ok(updatedSpace);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        Space updated = service.update(space);
-        return ResponseEntity.ok(updated); // 200 OK con el objeto actualizado
     }
+
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteSpace(@PathVariable Integer id){
         if(service.existsById(id)){

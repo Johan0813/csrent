@@ -13,20 +13,22 @@ import java.util.List;
 @Service
 public class ReservationService {
 
-    private ReservationRepository reservationRepository;
-    private UserService userService;
-    private SpaceService spaceService;
+    private final ReservationRepository reservationRepository;
+    private final UserService userService;
+    private final SpaceService spaceService;
 
+    @Autowired
     public ReservationService(ReservationRepository reservationRepository, UserService userService, SpaceService spaceService) {
         this.reservationRepository = reservationRepository;
         this.userService = userService;
         this.spaceService = spaceService;
     }
 
-    public List<Reservation> getAll(){
+    public List<Reservation> getAll() {
         return reservationRepository.findAll();
     }
-    public Reservation add (ReservationDTO reservationDTO){
+
+    public Reservation add(ReservationDTO reservationDTO) {
         User user = userService.getUserByEmail(reservationDTO.getEmailuser());
         Space space = spaceService.getSpace(reservationDTO.getIdSpace());
         Reservation reservation = new Reservation();
@@ -41,6 +43,19 @@ public class ReservationService {
     public Reservation getById(Integer id) {
         return reservationRepository.findById(id).orElse(null);
     }
+
+    public Reservation update(Integer id, ReservationDTO dto) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation == null) return null;
+
+        User user = userService.getUserByEmail(dto.getEmailuser());
+        Space space = spaceService.getSpace(dto.getIdSpace());
+
+        if (user != null) reservation.setUser(user);
+        if (space != null) reservation.setSpace(space);
+        if (dto.getDate() != null) reservation.setDateReservation(dto.getDate());
+        if (dto.getStatus() != null) reservation.setStatus(dto.getStatus());
+
+        return reservationRepository.save(reservation);
+    }
 }
-
-
