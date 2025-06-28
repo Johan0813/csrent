@@ -4,6 +4,7 @@ import com.csrent.dto.ReservationDTO;
 import com.csrent.model.Reservation;
 import com.csrent.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,5 +41,15 @@ public class ReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Integer id) {
+        if (reservationService.findById(id).isPresent()) {
+            reservationService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservación no encontrada");
+        }
+    }
 
 }
+
